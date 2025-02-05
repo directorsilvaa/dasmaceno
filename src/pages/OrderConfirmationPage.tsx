@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle2, ArrowRight, Home, ClipboardList } from 'lucide-react';
+import { CheckCircle2, ArrowRight, Home, ClipboardList, Upload } from 'lucide-react';
+import FileUpload from '../components/FileUpload';
 
 export default function OrderConfirmationPage() {
   const navigate = useNavigate();
+  const [showUpload, setShowUpload] = useState(false);
+
+  const handleUploadComplete = (url: string) => {
+    console.log('Arquivo enviado:', url);
+    // Aqui você pode implementar a lógica para salvar a URL do arquivo no banco de dados
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
@@ -44,6 +51,27 @@ export default function OrderConfirmationPage() {
                 <span className="text-gray-600">Forma de pagamento:</span>
                 <span className="font-bold text-gray-800">Cartão de crédito</span>
               </div>
+            </div>
+
+            {/* File Upload Section */}
+            <div className="mb-8">
+              <button
+                onClick={() => setShowUpload(!showUpload)}
+                className="flex items-center justify-center gap-2 w-full px-6 py-4 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors"
+              >
+                <Upload className="w-5 h-5" />
+                <span>Anexar comprovante</span>
+              </button>
+
+              {showUpload && (
+                <div className="mt-4">
+                  <FileUpload 
+                    onUploadComplete={handleUploadComplete}
+                    maxSizeMB={5}
+                    allowedTypes={['image/jpeg', 'image/png', 'image/gif', 'application/pdf']}
+                  />
+                </div>
+              )}
             </div>
 
             {/* Action Buttons */}
